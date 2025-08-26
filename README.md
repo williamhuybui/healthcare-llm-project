@@ -185,3 +185,7 @@ pip install -r requirements.txt
 - Check the error logs in the console
 - Verify environment variables are loaded
 - Ensure all dependencies are installed
+
+### Up-to-speed
+
+https://learngitbranching.js.org/
