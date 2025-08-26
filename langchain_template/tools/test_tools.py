@@ -1,6 +1,6 @@
-"""LangGraph Conversational Agent with Tools
+"""Test Tools for LangGraph Agents
 
-A conversational AI agent with multiple tools:
+A collection of tools for testing and demonstrating agent capabilities:
 - Calculator for mathematical expressions
 - Time retrieval
 - Public IP address lookup
@@ -8,25 +8,11 @@ A conversational AI agent with multiple tools:
 - Web search via Tavily
 """
 
-import os
 import math
 import re
 import time
-from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
-from langchain_tavily import TavilySearch
 from langchain_core.tools import tool
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.prebuilt import create_react_agent
 
-# Load environment variables
-load_dotenv('../.env')
-
-# Environment variables
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-TAVILY_API_KEY = os.getenv('TAVILY_API_KEY')
-
-# ===== TOOL DEFINITIONS =====
 
 @tool
 def calculator(expression: str) -> str:
@@ -56,10 +42,12 @@ def calculator(expression: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
+
 @tool
 def get_time() -> str:
     """Returns the current date and time."""
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
 
 @tool
 def get_public_ip(_: str = "") -> str:
@@ -71,6 +59,7 @@ def get_public_ip(_: str = "") -> str:
     except Exception as e:
         return f"Error: {str(e)}"
     
+
 @tool
 def get_city_by_ip(ip: str = "") -> str:
     """Returns the city for a given IP address.
@@ -91,49 +80,15 @@ def get_city_by_ip(ip: str = "") -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 
-# ===== AGENT SETUP =====
-memory = MemorySaver()
-model = init_chat_model("openai:gpt-4")
-search = TavilySearch(max_results=2, api_key=TAVILY_API_KEY) # Web search tool
-tools = [search, calculator, get_time, get_public_ip, get_city_by_ip]
-agent_executor = create_react_agent(model, tools, checkpointer=memory) #Orchestrator
 
-def main():
-    """Main conversation loop."""
-    config = {"configurable": {"thread_id": "conversation_1"}}
-    
-    print("🤖 AI Agent ready! Available tools: calculator, time, IP lookup, search")
-    print("💬 Type 'exit' to quit\n")
-    
-    while True:
-        try:
-            user_input = input("👤 You: ").strip()
-            
-            if user_input.lower() in ['exit', 'quit', 'bye']:
-                print("👋 Goodbye!")
-                break
-            
-            if not user_input:
-                continue
-            
-            input_message = {
-                "messages": [{
-                    "role": "user",
-                    "content": user_input
-                }]
-            }
-            
-            response = agent_executor.invoke(input_message, config=config)
-            
-            # Display all messages (user, tool calls, and AI responses)
-            for message in response["messages"]:
-                message.pretty_print()
-                    
-        except KeyboardInterrupt:
-            print("\n👋 Goodbye!")
-            break
-        except Exception as e:
-            print(f"❌ Error: {str(e)}")
+def get_all_tools():
+    """Returns a list of all available tools."""
+    return [calculator, get_time, get_public_ip, get_city_by_ip]
 
-if __name__ == "__main__":
-    main()
+
+if __name__ == '__main__':
+    import requests
+    ip = requests.get('https://api.ipify.org', timeout=5).text
+    res = requests.get(f'https://ipinfo.io/{ip}/json', timeout=5)
+    city = res.json().get('city', 'Unknown')
+    print(ip, city)
