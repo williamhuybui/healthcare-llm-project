@@ -57,6 +57,10 @@ healthcare-llm-project/
    
    # Or use the setup script
    .\setup_env.ps1
+   
+   # Mac/Linux
+   python3 -m venv venv
+   source venv/bin/activate
    ```
 
 3. **Install dependencies**
