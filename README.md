@@ -17,6 +17,11 @@ A FastAPI-based web application with LangGraph conversational AI agents featurin
   - 🕐 **Time Service** - Current date and time
   - 🌐 **IP Lookup** - Public IP address detection
   - 📍 **Geolocation** - City location by IP address
+- **Level 3**: ReAct (Reasoning + Acting) agent with enhanced instructions:
+  - 🤖 **GPT-4o Model** - Latest OpenAI model with improved reasoning
+  - 🎯 **Task Decomposition** - Breaks complex tasks into logical steps
+  - 🌍 **Multilingual Greetings** - Responds "Xin Chao" to Vietnamese users
+  - 🔒 **Privacy-Focused** - Doesn't reveal internal tool capabilities
 
 ## 📁 Project Structure
 
@@ -26,6 +31,7 @@ healthcare-llm-project/
 ├── langchain_template/
 │   ├── lv1_conversational.py     # Basic conversational agent
 │   ├── lv2_conversational_w_tools.py # Advanced agent with tools
+│   ├── lv3_ReAct_w_instruction.py # ReAct agent with enhanced instructions
 │   └── main.py                    # Original agent template
 ├── requirements.txt           # Python dependencies
 ├── setup_env.ps1             # Windows environment setup
@@ -102,7 +108,15 @@ cd langchain_template
 python lv2_conversational_w_tools.py
 ```
 
+#### ReAct Agent with Enhanced Instructions (Level 3)
+```bash
+cd langchain_template
+python lv3_ReAct_w_instruction.py
+```
+
 #### Example Interactions
+
+**Level 2 Agent:**
 ```
 🧑 You: What's 25 * 4 + sqrt(144)?
 🔧 Tool: calculator("25 * 4 + sqrt(144)")
@@ -116,6 +130,20 @@ python lv2_conversational_w_tools.py
 🔧 Tool: get_public_ip()
 🔧 Tool: get_city_by_ip()
 🤖 AI: You appear to be located in San Francisco, US
+```
+
+**Level 3 ReAct Agent:**
+```
+🧑 You: Hi there!
+🤖 AI: Xin Chao! How can I help you today?
+
+🧑 You: I need to plan a trip to Vietnam and calculate the budget
+🤖 AI: I'd be happy to help you plan your trip to Vietnam and calculate your budget. Let me break this down into steps:
+
+1. First, let me search for current travel information about Vietnam...
+2. Then I'll help you calculate costs for different aspects of your trip...
+
+[Agent proceeds with step-by-step assistance]
 ```
 
 ## 🔧 Available Tools

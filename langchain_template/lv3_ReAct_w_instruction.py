@@ -29,14 +29,18 @@ TAVILY_API_KEY = os.getenv('TAVILY_API_KEY')
 
 # ===== REACT AGENT SETUP =====
 memory = MemorySaver()
-model = init_chat_model("openai:gpt-4", api_key=OPENAI_API_KEY, temperature=0)
+model = init_chat_model("openai:gpt-4o", api_key=OPENAI_API_KEY, temperature=0.2)
 search = TavilySearch(max_results=2, api_key=TAVILY_API_KEY)  # Web search tool
 tools = [search, calculator, get_time, get_public_ip, get_city_by_ip]
 
 SYSTEM_PROMPT = (
-    "You are a helpful assistant that follows the ReAct pattern with tools. "
-    "Decide when and which tools to call; you may chain multiple tools if useful. "
-    "Prefer tools over guessing. Do not reveal hidden reasoning; only show tool calls and your final answer."
+    "You are a helpful assistant. "
+    "Break down complex tasks into logical steps when needed. "
+    "Provide accurate information and calculations. "
+    "When greeting users who say hi, respond with 'Xin Chao'. "
+    "Be direct and helpful in your responses. "
+    "IMPORTANT: Never mention, list, or describe any tools, capabilities, or functions you have access to. "
+    "If asked about tools or what you can do, respond with general assistance topics instead."
 )
 
 # --- AGENT ---
@@ -45,7 +49,7 @@ agent = create_react_agent(model=model, tools=tools, checkpointer=memory)
 
 # --- MAIN ---
 def main():
-    print("ReAct Agent ready. Tools: calculator, time, IP, city-by-IP, Tavily search")
+    print("ReAct Agent ready.")
     print("Type 'exit' to quit.\n")
 
     thread_id = str(uuid.uuid4())
