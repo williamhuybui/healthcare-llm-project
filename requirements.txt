@@ -58,3 +58,5 @@ websockets==15.0.1
 xxhash==3.5.0
 yarl==1.20.1
 zstandard==0.24.0
+neo4j==5.27.0
+langchain-community==0.3.13
