@@ -1,7 +1,20 @@
+# ====================================
+# CSV to GraphQL Service - All Requirements
+# ====================================
+
+# === PYTHON DEPENDENCIES ===
+
+# FastAPI and GraphQL for Python implementation
+fastapi==0.104.1
+strawberry-graphql[fastapi]==0.215.1
+uvicorn==0.24.0
+pandas==2.1.4
+python-multipart==0.0.6
+
+# === EXISTING PROJECT DEPENDENCIES ===
+
 # Core FastAPI and server dependencies
-fastapi
 gunicorn
-uvicorn
 starlette
 
 # LangChain ecosystem (let pip resolve compatible versions)
@@ -18,7 +31,6 @@ langgraph-checkpoint
 langgraph-checkpoint-sqlite
 langgraph-prebuilt
 langgraph-sdk
-# langgraph-cli[inmem]  # Removed due to complex dependency conflicts
 
 # LangSmith (let pip resolve version)
 langsmith
