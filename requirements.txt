@@ -42,6 +42,7 @@ tiktoken
 # Database
 neo4j
 SQLAlchemy
+elasticsearch
 
 # Data validation and serialization
 pydantic

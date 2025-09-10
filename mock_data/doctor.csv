@@ -1,0 +1,6 @@
+doctor_id,npi,doctor_name,specialty,facility_id,accepts_new_patients,phone,email
+DOC_5c040c,1024127884,Dr. Riley Martinez,Dermatology,FAC_740cdc,True,832-283-5919,riley.martinez@exampleclinic.com
+DOC_a80e05,1038646352,Dr. Morgan Tran,Orthopedics,FAC_cb6a16,True,832-320-9387,morgan.tran@exampleclinic.com
+DOC_5fb948,1020399018,Dr. Taylor Bui,Cardiology,FAC_2599cb,True,832-240-2271,taylor.bui@exampleclinic.com
+DOC_f2e04e,1079774974,Dr. Morgan Bui,Cardiology,FAC_740cdc,False,832-667-2126,morgan.bui@exampleclinic.com
+DOC_65a60a,1093555402,Dr. Riley Tran,Dermatology,FAC_687808,True,832-262-6072,riley.tran@exampleclinic.com

@@ -1,0 +1,6 @@
+facility_id,facility_name,npi,address_line1,city,state,zip,phone
+FAC_7f08e3,Lone Star Clinic #1,1020246633,6568 Main St,Houston,TX,79195,713-296-6991
+FAC_687808,Greenway Surgery Center #2,1007784483,8413 Oak St,Houston,TX,77353,713-644-7851
+FAC_a388c1,Memorial Health #3,1032301241,1586 Milam St,San Antonio,TX,77243,713-779-3028
+FAC_51b29c,Texas Medical Center #4,1084641177,9651 Main St,El Paso,TX,79399,713-606-1812
+FAC_637482,Texas Medical Center #5,1006252221,9220 Oak St,Dallas,TX,78717,713-347-9858

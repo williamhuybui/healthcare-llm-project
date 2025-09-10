@@ -1,0 +1,11 @@
+coverage_id,plan_id,service_category,copay,coinsurance_pct,prior_auth_required,coverage_limit,notes
+COV_448a16,PLAN_738cbe,Primary Care Visit,40,0,True,Unlimited,Subject to plan OOP maximum.
+COV_2f4cd9,PLAN_738cbe,Specialist Visit,10,0,False,After deductible,Copay waived for telehealth.
+COV_045d95,PLAN_738cbe,Emergency Room,0,10,False,Subject to deductible,Out-of-network not covered for HMO/EPO.
+COV_2aa86e,PLAN_738cbe,Urgent Care,50,20,False,After deductible,Coinsurance applies after deductible.
+COV_dcae84,PLAN_738cbe,Generic Drugs,30,0,True,Subject to deductible,Requires referral from PCP.
+COV_9d9e9d,PLAN_738cbe,Brand Drugs,30,30,False,Unlimited,Out-of-network not covered for HMO/EPO.
+COV_230427,PLAN_738cbe,Lab Services,0,20,False,"$2,000/year",Requires referral from PCP.
+COV_650e22,PLAN_738cbe,Imaging (MRI/CT),75,10,False,Unlimited,Out-of-network not covered for HMO/EPO.
+COV_6d01c8,PLAN_738cbe,Maternity,40,20,True,After deductible,Copay waived for telehealth.
+COV_409dd4,PLAN_738cbe,Physical Therapy,75,20,False,Unlimited,Coinsurance applies after deductible.
