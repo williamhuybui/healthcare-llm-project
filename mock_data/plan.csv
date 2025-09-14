@@ -1,0 +1,4 @@
+plan_id,plan_name,plan_type,premium_monthly,deductible_individual,oop_max_individual,pdf_url
+1,Blue Advantage Gold HMO Standard,HMO,550,1500,7800,mock_data/plans_pdf/blue_advantage_gold_hmo_standard.pdf
+2,MyBlue Health Silver 405,HMO,420,2500,8700,mock_data/plans_pdf/myblue_health_silver_405.pdf
+3,MyBlue Health Gold 403,HMO,490,2000,8200,mock_data/plans_pdf/myblue_health_gold_403.pdf

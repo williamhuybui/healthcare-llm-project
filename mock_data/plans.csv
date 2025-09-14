@@ -1,7 +1,0 @@
-plan_id,plan_name,plan_type,premium_monthly,deductible_individual,deductible_family,oop_max_individual,oop_max_family,effective_start,effective_end,pdf_url
-PLAN_BCBS_SILVER405,MyBlue Health Silver 405,HMO,0.0,0,0,0,0,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-shsa03bftitxo-tx-2025.pdf
-PLAN_BCBS_GOLD403,MyBlue Health Gold 403,HMO,0.0,0,0,0,0,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-ghsa01bftitxo-tx-2025.pdf
-PLAN_BCBS_GOLD_STD,Blue Advantage Gold HMO Standard,HMO,0.0,0,0,0,0,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-gh3a71bavitxp-tx-2025.pdf
-PLAN_5c080a,MyBlue Health Silver 405,HMO,,,,,,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-sh2a03bftitxp-tx-2025.pdf
-PLAN_70d986,MyBlue Health Gold 403,HMO,,,,,,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-gh3a01bftitxp-tx-2025.pdf
-PLAN_47dfb0,Blue Advantage Gold HMO Standard,HMO,,,,,,2025-01-01,2025-12-31,https://www.bcbstx.com/sbc/ind/sbc-gh3a71bavitxp-tx-2025.pdf

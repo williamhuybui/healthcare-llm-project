@@ -1,219 +1,72 @@
-# Healthcare LLM Project
+# Goal
+The goal of this project is to build a healthcare-focused chatbot that provides accurate answers without hallucination.
 
-A FastAPI-based web application with LangGraph conversational AI agents featuring multiple tools and capabilities.
+# Features
+- **Supports multiple formats** – works with both structured data (CSVs) and unstructured documents (PDFs).  
+- **Cross-dataset integration** – combines information from different tables (user, facility, doctor, plan) to answer questions accurately.  
+- **Complex query handling** – can follow multi-step logic across datasets to resolve more advanced healthcare questions.  
 
-## 🚀 Features
+# Data Sources
+### user
+- `user_id (PK)`, `first_name`, `last_name`, `city`, `state`, `zip`, `lang_pref`, `plan_id (FK)`, `primary_doctor_id (nullable)`
 
-### FastAPI Web Server
-- Simple REST API with JSON responses
-- Auto-reload development server
-- Production-ready with uvicorn
+### plan
+- `plan_id (PK)`, `plan_name`, `plan_type`, `premium_monthly`, `deductible_individual`, `oop_max_individual`, `pdf_url`
 
-### LangGraph AI Agents
-- **Level 1**: Basic conversational agent with memory
-- **Level 2**: Advanced agent with multiple tools:
-  - 🧮 **Calculator** - Mathematical expressions and functions
-  - 🔍 **Web Search** - Real-time search via Tavily API
-  - 🕐 **Time Service** - Current date and time
-  - 🌐 **IP Lookup** - Public IP address detection
-  - 📍 **Geolocation** - City location by IP address
-- **Level 3**: ReAct (Reasoning + Acting) agent with enhanced instructions:
-  - 🤖 **GPT-4o Model** - Latest OpenAI model with improved reasoning
-  - 🎯 **Task Decomposition** - Breaks complex tasks into logical steps
-  - 🌍 **Multilingual Greetings** - Responds "Xin Chao" to Vietnamese users
-  - 🔒 **Privacy-Focused** - Doesn't reveal internal tool capabilities
+### facility
+- `facility_id (PK)`, `facility_name`, `npi`, `city`, `state`, `zip`, `phone`, `accepts_plan_ids`
 
-## 📁 Project Structure
+### doctor
+- `doctor_id (PK)`, `doctor_name`, `npi`, `specialty`, `facility_id (FK)` (assume 1 primary facility), `languages`, `phone`, `email`
 
-```
-healthcare-llm-project/
-├── main.py                    # FastAPI web server
-├── langchain_template/
-│   ├── lv1_conversational.py     # Basic conversational agent
-│   ├── lv2_conversational_w_tools.py # Advanced agent with tools
-│   ├── lv3_ReAct_w_instruction.py # ReAct agent with enhanced instructions
-│   └── main.py                    # Original agent template
-├── requirements.txt           # Python dependencies
-├── setup_env.ps1             # Windows environment setup
-├── .env                      # Environment variables
-├── .gitignore               # Git ignore rules
-└── AZURE_DEPLOYMENT.md      # Azure deployment guide
-```
+### pdf
+- *MyBlue Health Silver 405*  
+- *MyBlue Health Gold 403*  
+- *Blue Advantage Gold HMO Standard*  
 
-## 🛠 Installation
+# How It Works
+The chatbot can answer a wide range of questions, from straightforward to complex, by pulling from one or more datasets.
 
-### Prerequisites
-- Python 3.11+
-- OpenAI API key
-- Tavily API key (for search functionality)
+### Single-source queries
+- *“What is the deductible for my plan?”* → (plans)  
+- *“Which doctors specialize in pediatrics?”* → (doctor)  
 
-### Setup
+### Multi-source queries
+- *“How much does it cost for me to see a doctor?”* → (user, plans)  
+- *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  
+- *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/williamhuybui/healthcare-llm-project
-   cd healthcare-llm-project
-   ```
+### Complex scenario queries
+- *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  
+- *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  
+- *“What preventive care services are fully covered under my plan?”* → (plans)  
+- *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  
 
-2. **Create virtual environment**
-   ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-   
-   # Or use the setup script
-   .\setup_env.ps1
-   
-   # Mac/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+# User Story
+### Step 1. User Sign-In
+- The system authenticates the user.  
+- `user.csv` provides user profile info (plan ID, language preference, location, etc.).  
+- This context is attached to the chat session.  
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Step 2. Chat Start
+- The user begins asking questions.  
+- The request is passed into the orchestration layer.  
 
-4. **Configure environment variables**
-   
-   Create/update `.env` file:
-   ```env
-   OPENAI_API_KEY=your_openai_api_key_here
-   TAVILY_API_KEY=your_tavily_api_key_here
-   ```
+### Step 3. Planning Agent
+- Analyzes the user’s question and identifies which data sources are relevant (`user.csv`, `facility.csv`, `doctor.csv`, `plans.pdf`).  
+- Checks **feasibility**: does the system already have enough context to answer? If not, it can either (a) ask the user for more information, or (b) reframe the plan with fallback options.  
+- Outputs a structured plan of action (roadmap) for the next agent.  
 
-## 🚀 Usage
+### Step 4. ReAct Agent
+- A ReAct-style Agent executes the plan.  
+- It uses the right tools: SQL queries for CSVs, semantic/vector search for PDFs, or graph queries if multi-hop reasoning is required.  
+- It composes a draft answer with citations.  
 
-### FastAPI Server
-```bash
-# Development server
-python main.py
+### Step 5. Validation Agent
+- A Validate Agent checks the draft answer against:  
+  - The retrieved sources (to ensure grounding)  
+  - General domain knowledge (e.g., no contradictions to SBC rules)  
+- If validation fails, control loops back to Step 3 for replanning.  
 
-# Or with uvicorn
-uvicorn main:app --reload
-```
-Access at: http://127.0.0.1:8000
-
-### Conversational Agents
-
-#### Basic Agent (Level 1)
-```bash
-cd langchain_template
-python lv1_conversational.py
-```
-
-#### Advanced Agent with Tools (Level 2)
-```bash
-cd langchain_template
-python lv2_conversational_w_tools.py
-```
-
-#### ReAct Agent with Enhanced Instructions (Level 3)
-```bash
-cd langchain_template
-python lv3_ReAct_w_instruction.py
-```
-
-#### Example Interactions
-
-**Level 2 Agent:**
-```
-🧑 You: What's 25 * 4 + sqrt(144)?
-🔧 Tool: calculator("25 * 4 + sqrt(144)")
-🤖 AI: The result is 112
-
-🧑 You: What time is it?
-🔧 Tool: get_time()
-🤖 AI: The current time is 2024-01-15 14:30:25
-
-🧑 You: Where am I located?
-🔧 Tool: get_public_ip()
-🔧 Tool: get_city_by_ip()
-🤖 AI: You appear to be located in San Francisco, US
-```
-
-**Level 3 ReAct Agent:**
-```
-🧑 You: Hi there!
-🤖 AI: Xin Chao! How can I help you today?
-
-🧑 You: I need to plan a trip to Vietnam and calculate the budget
-🤖 AI: I'd be happy to help you plan your trip to Vietnam and calculate your budget. Let me break this down into steps:
-
-1. First, let me search for current travel information about Vietnam...
-2. Then I'll help you calculate costs for different aspects of your trip...
-
-[Agent proceeds with step-by-step assistance]
-```
-
-## 🔧 Available Tools
-
-| Tool | Function | Example Usage |
-|------|----------|---------------|
-| Calculator | Mathematical expressions | `2+2`, `sqrt(16)`, `5!`, `sin(pi/2)` |
-| Web Search | Real-time search results | `"latest news about AI"` |
-| Time Service | Current date/time | `"what time is it?"` |
-| IP Lookup | Public IP address | `"what's my IP?"` |
-| Geolocation | Location by IP | `"where am I?"` |
-
-## 🌐 Deployment
-
-### Azure App Service
-See [AZURE_DEPLOYMENT.md](AZURE_DEPLOYMENT.md) for detailed Azure deployment instructions.
-
-### Local Production
-```bash
-# Using gunicorn (Linux/Mac)
-gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
-
-# Using uvicorn (Windows/Cross-platform)
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-## 📝 API Documentation
-
-Once running, visit:
-- **Interactive docs**: http://127.0.0.1:8000/docs
-- **Alternative docs**: http://127.0.0.1:8000/redoc
-
-## 🔑 Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `OPENAI_API_KEY` | OpenAI API authentication | Yes |
-| `TAVILY_API_KEY` | Tavily search API key | Yes |
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**ModuleNotFoundError**: Ensure virtual environment is activated and dependencies are installed
-```bash
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-**API Key Errors**: Verify your API keys are correctly set in the `.env` file
-
-**Port Already in Use**: Change the port in `main.py` or kill the existing process
-
-### Getting Help
-- Check the error logs in the console
-- Verify environment variables are loaded
-- Ensure all dependencies are installed
-
-### Up-to-speed
-
-https://learngitbranching.js.org/
+### Step 6. User Response
+- The validated answer is returned to the user with citations and, if applicable, breakdowns of costs or reasoning steps.  

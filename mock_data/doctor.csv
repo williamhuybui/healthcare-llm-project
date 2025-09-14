@@ -1,6 +1,5 @@
-doctor_id,npi,doctor_name,specialty,facility_id,accepts_new_patients,phone,email
-DOC_5c040c,1024127884,Dr. Riley Martinez,Dermatology,FAC_740cdc,True,832-283-5919,riley.martinez@exampleclinic.com
-DOC_a80e05,1038646352,Dr. Morgan Tran,Orthopedics,FAC_cb6a16,True,832-320-9387,morgan.tran@exampleclinic.com
-DOC_5fb948,1020399018,Dr. Taylor Bui,Cardiology,FAC_2599cb,True,832-240-2271,taylor.bui@exampleclinic.com
-DOC_f2e04e,1079774974,Dr. Morgan Bui,Cardiology,FAC_740cdc,False,832-667-2126,morgan.bui@exampleclinic.com
-DOC_65a60a,1093555402,Dr. Riley Tran,Dermatology,FAC_687808,True,832-262-6072,riley.tran@exampleclinic.com
+doctor_id,doctor_name,npi,specialty,facility_id,languages,accepts_new_patients,phone,email
+1001,"Thao Le, MD",3456789012,Internal Medicine,501,"[""en"",""vi""]",True,(713) 555-1111,thao.le@exampleclinic.com
+1002,"Carlos Ramirez, MD",3456789013,Family Medicine,502,"[""en"",""es""]",True,(713) 555-2222,c.ramirez@exampleclinic.com
+2001,"Emily Chen, MD",4456789012,Internal Medicine,601,"[""en"",""zh""]",True,(212) 555-3333,e.chen@exampleclinic.com
+2002,"Jason Patel, MD",4456789013,Cardiology,602,"[""en"",""hi""]",False,(212) 555-4444,j.patel@exampleclinic.com
