@@ -28,19 +28,19 @@ The goal of this project is to build a healthcare-focused chatbot that provides 
 The chatbot can answer a wide range of questions, from straightforward to complex, by pulling from one or more datasets.
 
 ### Single-source queries
-- *“What is the deductible for my plan?”* → (plans)  
-- *“Which doctors specialize in pediatrics?”* → (doctor)  
+- 1) *“What is the deductible for my plan?”* → (plans)  
+- 2) *“Which doctors specialize in pediatrics?”* → (doctor)  
 
 ### Multi-source queries
-- *“How much does it cost for me to see a doctor?”* → (user, plans)  
-- *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  
-- *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  
+- 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  
+- 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  
+- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  
 
 ### Complex scenario queries
-- *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  
-- *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  
-- *“What preventive care services are fully covered under my plan?”* → (plans)  
-- *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  
+- 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  
+- 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  
+- 8) *“What preventive care services are fully covered under my plan?”* → (plans)  
+- 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  
 
 # User Story
 ### Step 1. User Sign-In
@@ -54,13 +54,13 @@ The chatbot can answer a wide range of questions, from straightforward to comple
 
 ### Step 3. Planning Agent
 - Analyzes the user’s question and identifies which data sources are relevant (`user.csv`, `facility.csv`, `doctor.csv`, `plans.pdf`).  
-- Checks **feasibility**: does the system already have enough context to answer? If not, it can either (a) ask the user for more information, or (b) reframe the plan with fallback options.  
-- Outputs a structured plan of action (roadmap) for the next agent.  
+- Checks **feasibility**: does the system already have enough context to answer? 
+   - If not, it can either (a) ask the user for more information, or (b) reframe the plan with fallback options.  
+   - If it is, outputs a structured plan of action (roadmap) for the next agent.  
 
 ### Step 4. ReAct Agent
 - A ReAct-style Agent executes the plan.  
-- It uses the right tools: SQL queries for CSVs, semantic/vector search for PDFs, or graph queries if multi-hop reasoning is required.  
-- It composes a draft answer with citations.  
+- It uses the right tools: SQL queries for CSVs, semantic/vector search for PDFs
 
 ### Step 5. Validation Agent
 - A Validate Agent checks the draft answer against:  
