@@ -28,19 +28,19 @@ The goal of this project is to build a healthcare-focused chatbot that provides 
 The chatbot can answer a wide range of questions, from straightforward to complex, by pulling from one or more datasets.
 
 ### Single-source queries
-- 1) *“What is the deductible for my plan?”* → (plans)  
-- 2) *“Which doctors specialize in pediatrics?”* → (doctor)  
+- 1) *“What is the deductible for my plan?”* → (plans) (plan.csv) 
+- 2) *“Which doctors specialize in pediatrics?”* → (doctor)  (doctor.csv)
 
 ### Multi-source queries
-- 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  
-- 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  
-- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  
+- 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  (user.csv, plan.csv)
+- 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  (user.csv, facility.csv, plans_pdf)
+- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv)
 
 ### Complex scenario queries
-- 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  
-- 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  
-- 8) *“What preventive care services are fully covered under my plan?”* → (plans)  
-- 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  
+- 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  (user.csv, plan.csv)
+- 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  (plans_pdf, facility.csv)
+- 8) *“What preventive care services are fully covered under my plan?”* → (plans)   (plans_pdf, plan.csv)
+- 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  (plans_pdf, doctor.csv)
 
 # User Story
 ### Step 1. User Sign-In
