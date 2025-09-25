@@ -1,0 +1,69 @@
+{
+  "query_patterns": {
+    "plan_lookup": {
+      "keywords": ["plan", "coverage", "benefits", "premium", "deductible"],
+      "typical_steps": [
+        {"action": "sql_query", "target": "plan_data", "purpose": "Get plan details"},
+        {"action": "sql_query", "target": "coverage_details", "purpose": "Get coverage information"}
+      ]
+    },
+    "doctor_search": {
+      "keywords": ["doctor", "physician", "provider", "specialist"],
+      "typical_steps": [
+        {"action": "sql_query", "target": "doctor", "purpose": "Find matching doctors"},
+        {"action": "sql_query", "target": "facility", "purpose": "Get facility information"}
+      ]
+    },
+    "cost_estimate": {
+      "keywords": ["cost", "price", "copay", "coinsurance", "out of pocket"],
+      "typical_steps": [
+        {"action": "sql_query", "target": "coverage_details", "purpose": "Get cost sharing details"},
+        {"action": "calculation", "purpose": "Calculate estimated costs"}
+      ]
+    },
+    "plan_comparison": {
+      "keywords": ["compare", "versus", "vs", "difference", "better"],
+      "typical_steps": [
+        {"action": "sql_query", "target": "plan_data", "purpose": "Get multiple plan details"},
+        {"action": "analysis", "purpose": "Compare features and costs"}
+      ]
+    },
+    "pdf_search": {
+      "keywords": ["document", "brochure", "summary", "details", "policy"],
+      "typical_steps": [
+        {"action": "pdf_search", "purpose": "Search plan documents"},
+        {"action": "sql_query", "target": "plan_data", "purpose": "Get structured data context"}
+      ]
+    }
+  },
+  "user_role_context": {
+    "Patient": {
+      "focus": "Personal coverage, costs, provider access",
+      "data_priority": ["own_plan", "doctors", "costs", "coverage"]
+    },
+    "Provider": {
+      "focus": "Network status, reimbursement, patient coverage",
+      "data_priority": ["network_plans", "reimbursement", "patient_eligibility"]
+    },
+    "Admin": {
+      "focus": "Claims, eligibility, plan administration",
+      "data_priority": ["all_plans", "claims", "eligibility", "reporting"]
+    }
+  },
+  "data_sources": {
+    "sql_tables": {
+      "user": "User profiles and plan assignments",
+      "plan": "Insurance plan master data", 
+      "doctor": "Provider directory",
+      "facility": "Healthcare facilities",
+      "coverage": "Coverage benefits and costs",
+      "plan_data": "Detailed plan information",
+      "coverage_details": "Service-specific coverage rules"
+    },
+    "pdf_content": {
+      "plan_summaries": "Official plan benefit summaries",
+      "provider_directories": "Network provider listings",
+      "coverage_documents": "Detailed coverage policies"
+    }
+  }
+}

@@ -68,3 +68,12 @@ trustcall
 requests
 httpx
 aiohttp
+
+# ====================================
+# Dash Frontend Dependencies
+# ====================================
+dash==2.17.1
+dash-bootstrap-components==1.5.0
+
+# Additional data processing for the dashboard
+numpy

@@ -1,0 +1,99 @@
+{
+  "version": "1.0",
+  "domain": "health_plans",
+  "entities": [
+    {
+      "table": "plan",
+      "description": "Insurance plan master record.",
+      "primary_key": ["plan_id"],
+      "columns": [
+        {"name": "plan_id", "type": "INT", "required": true, "description": "Unique plan identifier.", "synonyms": ["plan", "insurance_plan", "plan code"]},
+        {"name": "plan_name", "type": "STRING", "description": "Public/marketing name of the plan.", "synonyms": ["product name", "plan title"]},
+        {"name": "plan_type", "type": "STRING", "description": "Plan network type.", "enum": ["HMO","PPO","EPO"], "synonyms": ["network type"]},
+        {"name": "premium_monthly", "type": "NUMBER", "description": "Monthly premium in USD.", "unit": "USD"},
+        {"name": "deductible_individual", "type": "NUMBER", "description": "Individual deductible in USD.", "unit": "USD"},
+        {"name": "oop_max_individual", "type": "NUMBER", "description": "Individual out-of-pocket max in USD.", "unit": "USD"},
+        {"name": "pdf_url", "type": "STRING", "description": "Relative path under 'plans_pdf/' (e.g., 'plans_pdf/blue_advantage_gold_hmo_standard.pdf')."}
+      ]
+    },
+    {
+      "table": "coverage",
+      "description": "Benefit details per plan and service category.",
+      "primary_key": ["coverage_id"],
+      "unique_constraints": [["plan_id","service_category"]],
+      "columns": [
+        {"name": "coverage_id", "type": "STRING", "required": true, "description": "Unique coverage row id.", "synonyms": ["benefit_id"]},
+        {"name": "plan_id", "type": "INT", "required": true, "description": "Plan that this coverage row belongs to.", "foreign_key": {"table": "plan", "column": "plan_id"}},
+        {"name": "service_category", "type": "STRING", "description": "Benefit category (e.g., Primary Care, ER, Drugs).", "synonyms": ["benefit", "service type"]},
+        {"name": "copay", "type": "NUMBER", "description": "Flat copay amount (USD).", "unit": "USD"},
+        {"name": "coinsurance_pct", "type": "NUMBER", "description": "Percent patient pays after deductible (0–100).", "unit": "%"},
+        {"name": "prior_auth_required", "type": "BOOLEAN", "description": "Whether prior authorization is required.", "synonyms": ["requires prior auth"]},
+        {"name": "coverage_limit", "type": "STRING", "description": "Limit text (e.g., Unlimited, After deductible, $2,000/year)."},
+        {"name": "notes", "type": "STRING", "description": "Additional restrictions/notes."}
+      ]
+    },
+    {
+      "table": "facility",
+      "description": "Healthcare facilities (hospitals, centers).",
+      "primary_key": ["facility_id"],
+      "columns": [
+        {"name": "facility_id", "type": "INT", "required": true, "description": "Unique facility id."},
+        {"name": "facility_name", "type": "STRING", "description": "Official facility name.", "synonyms": ["hospital name", "clinic name"]},
+        {"name": "npi", "type": "STRING", "description": "10-digit National Provider Identifier (keep as string)."},
+        {"name": "address_line", "type": "STRING", "description": "Street address."},
+        {"name": "city", "type": "STRING"},
+        {"name": "state", "type": "STRING", "description": "2-letter US state."},
+        {"name": "zip", "type": "STRING"},
+        {"name": "phone", "type": "STRING"},
+        {
+          "name": "accepts_plan_ids",
+          "type": "ARRAY<INT>",
+          "description": "List of plan_ids this facility accepts (denormalized). Use facility_plan bridge in SQL if normalized.",
+          "synonyms": ["accepted plans", "in-network plans"]
+        }
+      ]
+    },
+    {
+      "table": "doctor",
+      "description": "Individual providers.",
+      "primary_key": ["doctor_id"],
+      "columns": [
+        {"name": "doctor_id", "type": "INT", "required": true, "description": "Unique doctor id."},
+        {"name": "doctor_name", "type": "STRING", "description": "Display name (e.g., 'Thao Le, MD').", "synonyms": ["provider name", "physician name"]},
+        {"name": "npi", "type": "STRING", "description": "10-digit Provider NPI (string to preserve leading zeros)."},
+        {"name": "specialty", "type": "STRING", "description": "Medical specialty.", "synonyms": ["dept", "practice area"]},
+        {"name": "facility_id", "type": "INT", "description": "Primary facility where the doctor practices.", "foreign_key": {"table": "facility", "column": "facility_id"}},
+        {"name": "languages", "type": "ARRAY<STRING>", "description": "List of language codes (e.g., ['en','vi'])."},
+        {"name": "accepts_new_patients", "type": "BOOLEAN", "description": "Whether the doctor is accepting new patients."},
+        {"name": "phone", "type": "STRING"},
+        {"name": "email", "type": "STRING"}
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "name": "plan_has_many_coverage_rows",
+      "cardinality": "1:N",
+      "left": {"table": "plan", "column": "plan_id"},
+      "right": {"table": "coverage", "column": "plan_id"},
+      "join_condition": "plan.plan_id = coverage.plan_id",
+      "semantics": "Each plan can define multiple service-category benefits."
+    },
+    {
+      "name": "facility_accepts_many_plans",
+      "cardinality": "M:N (denormalized)",
+      "left": {"table": "facility", "column": "accepts_plan_ids"},
+      "right": {"table": "plan", "column": "plan_id"},
+      "join_condition": "plan.plan_id IN facility.accepts_plan_ids",
+      "semantics": "A facility can accept many plans; a plan can be in-network at many facilities."
+    },
+    {
+      "name": "doctor_belongs_to_facility",
+      "cardinality": "N:1",
+      "left": {"table": "doctor", "column": "facility_id"},
+      "right": {"table": "facility", "column": "facility_id"},
+      "join_condition": "doctor.facility_id = facility.facility_id",
+      "semantics": "Each doctor is associated with one primary facility."
+    }
+  ]
+}

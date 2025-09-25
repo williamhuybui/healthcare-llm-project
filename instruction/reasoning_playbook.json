@@ -1,0 +1,62 @@
+{
+  "tables": ["plan", "coverage", "facility", "doctor"],
+  "canonical_join_paths": [
+    {
+      "intent": "Find coverage rules for a facility's accepted plans",
+      "path": ["facility → plan (accepts) → coverage"],
+      "joins": [
+        "plan.plan_id IN facility.accepts_plan_ids",
+        "coverage.plan_id = plan.plan_id"
+      ],
+      "notes": "Filter by coverage.service_category to target a benefit (e.g., 'Primary Care Visit')."
+    },
+    {
+      "intent": "List facilities where a plan is in-network",
+      "path": ["plan → facility (accepts)"],
+      "joins": ["plan.plan_id IN facility.accepts_plan_ids"]
+    },
+    {
+      "intent": "List doctors at a facility (filter by language or openness to new patients)",
+      "path": ["facility → doctor"],
+      "joins": ["doctor.facility_id = facility.facility_id"]
+    },
+    {
+      "intent": "Open the official PDF for a plan",
+      "path": ["plan → plan.pdf_url"],
+      "joins": [],
+      "notes": "Use plan.pdf_url as a relative file path under 'plans_pdf/'. If missing, resolve via resources.known_plan_pdfs or slugify(plan_name)."
+    },
+    {
+      "intent": "Summarize benefits from the PDF for a facility's accepted plan",
+      "path": ["facility → plan (accepts) → plan.pdf_url"],
+      "joins": ["plan.plan_id IN facility.accepts_plan_ids"],
+      "notes": "After selecting the plan, open the resolved PDF and extract sections like copays, coinsurance, OOP max, deductible."
+    }
+  ],
+  "usage_guidelines": [
+    "For benefits, start from the plan, then join to coverage by plan_id.",
+    "For hospital/clinic questions, traverse facility → plan via accepts_plan_ids; then to coverage or to the plan PDF when authoritative wording is needed.",
+    "Prefer LEFT joins from the user’s anchor entity (plan/facility) to avoid dropping rows.",
+    "Treat NPIs as strings (leading zeros possible).",
+    "If your DB is normalized, replace facility.accepts_plan_ids with a facility_plan bridge."
+  ],
+  "resources": {
+    "plans_pdf_base_dir": "plans_pdf/",
+    "known_plan_pdfs": {
+      "Blue Advantage Gold HMO Standard": "plans_pdf/blue_advantage_gold_hmo_standard.pdf",
+      "MyBlue Health Gold 403": "plans_pdf/myblue_health_gold_403.pdf",
+      "MyBlue Health Silver 405": "plans_pdf/myblue_health_silver_405.pdf"
+    },
+    "pdf_resolution_order": [
+      "If plan.pdf_url is present, use it (relative to plans_pdf_base_dir).",
+      "Else, look up resources.known_plan_pdfs by exact plan_name.",
+      "Else, slugify plan_name to lowercase, replace spaces and special chars with underscores, append .pdf, and look in plans_pdf_base_dir.",
+      "Else, if a unique plan_id-based filename exists, use it."
+    ],
+    "pdf_extraction_tips": [
+      "Scan sections titled 'Benefits', 'Copays', 'Coinsurance', 'Out-of-Pocket Maximum', 'Deductible'.",
+      "Normalize $ amounts to USD numbers and percentages to 0–100 ranges.",
+      "Prefer plan PDF text over coverage table rows when conflicts arise."
+    ]
+  }
+}

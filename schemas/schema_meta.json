@@ -1,0 +1,142 @@
+{
+  "database_schema": {
+    "tables": {
+      "user": {
+        "columns": {
+          "user_id": "INTEGER PRIMARY KEY",
+          "first_name": "TEXT",
+          "last_name": "TEXT", 
+          "city": "TEXT",
+          "state": "TEXT",
+          "zip": "TEXT",
+          "lang_pref": "TEXT",
+          "plan_id": "INTEGER",
+          "primary_doctor_id": "INTEGER"
+        },
+        "description": "User profiles and demographics"
+      },
+      "plan": {
+        "columns": {
+          "plan_id": "INTEGER PRIMARY KEY",
+          "plan_name": "TEXT",
+          "plan_type": "TEXT",
+          "premium_monthly": "REAL",
+          "deductible_individual": "REAL", 
+          "oop_max_individual": "REAL",
+          "pdf_url": "TEXT"
+        },
+        "description": "Insurance plan master data"
+      },
+      "doctor": {
+        "columns": {
+          "doctor_id": "INTEGER PRIMARY KEY",
+          "doctor_name": "TEXT",
+          "npi": "TEXT",
+          "specialty": "TEXT",
+          "facility_id": "INTEGER",
+          "languages": "TEXT",
+          "accepts_new_patients": "BOOLEAN",
+          "phone": "TEXT",
+          "email": "TEXT"
+        },
+        "description": "Healthcare provider directory"
+      },
+      "facility": {
+        "columns": {
+          "facility_id": "INTEGER PRIMARY KEY", 
+          "facility_name": "TEXT",
+          "npi": "TEXT",
+          "address_line": "TEXT",
+          "city": "TEXT",
+          "state": "TEXT",
+          "zip": "TEXT",
+          "phone": "TEXT",
+          "accepts_plan_ids": "TEXT"
+        },
+        "description": "Healthcare facilities and hospitals"
+      },
+      "coverage": {
+        "columns": {
+          "coverage_id": "TEXT PRIMARY KEY",
+          "plan_id": "TEXT",
+          "service_category": "TEXT",
+          "copay": "REAL",
+          "coinsurance_pct": "REAL", 
+          "prior_auth_required": "BOOLEAN",
+          "coverage_limit": "TEXT",
+          "notes": "TEXT"
+        },
+        "description": "Service-specific coverage details"
+      },
+      "plan_data": {
+        "columns": {
+          "id": "INTEGER PRIMARY KEY",
+          "document_id": "INTEGER",
+          "plan_name": "TEXT",
+          "plan_type": "TEXT",
+          "premium_monthly": "REAL",
+          "deductible_individual": "REAL",
+          "deductible_family": "REAL", 
+          "oop_max_individual": "REAL",
+          "oop_max_family": "REAL",
+          "coverage_period": "TEXT",
+          "network_type": "TEXT",
+          "issuer": "TEXT"
+        },
+        "description": "Detailed plan data from PDF extraction"
+      },
+      "coverage_details": {
+        "columns": {
+          "id": "INTEGER PRIMARY KEY",
+          "document_id": "INTEGER",
+          "service_category": "TEXT",
+          "service_subcategory": "TEXT",
+          "in_network_cost": "TEXT",
+          "out_network_cost": "TEXT",
+          "copay": "REAL",
+          "coinsurance_pct": "REAL",
+          "deductible_applies": "BOOLEAN",
+          "prior_auth_required": "BOOLEAN",
+          "coverage_limit": "TEXT",
+          "exclusions": "TEXT", 
+          "notes": "TEXT",
+          "page_reference": "INTEGER"
+        },
+        "description": "Detailed coverage rules from PDF documents"
+      }
+    }
+  },
+  "tool_schemas": {
+    "sql_tool": {
+      "input": {
+        "query": "string - SQL query to execute",
+        "description": "string - Human readable description of query purpose"
+      },
+      "output": {
+        "results": "list - Query result rows",
+        "columns": "list - Column names", 
+        "row_count": "integer - Number of rows returned",
+        "reference": "string - Reference for citation"
+      }
+    },
+    "pdf_tool": {
+      "input": {
+        "keywords": "string - Keywords to search for",
+        "document_type": "string - Type of document to search",
+        "max_results": "integer - Maximum results to return"
+      },
+      "output": {
+        "snippets": "list - Text snippets containing keywords",
+        "sources": "list - Source document references", 
+        "page_numbers": "list - Page numbers where found",
+        "reference": "string - Reference for citation"
+      }
+    }
+  },
+  "response_format": {
+    "final_answer": "string - Main response to user",
+    "references": "list - Source citations and references",
+    "confidence": "number - Confidence level 0-1",
+    "follow_up_suggestions": "list - Suggested follow-up questions"
+  }
+}

@@ -1,0 +1,5 @@
+user_id,first_name,last_name,city,state,zip,lang_pref,plan_id,primary_doctor_id,display_name,role
+101,Huy,Bui,Houston,TX,77002,vn,1,1001,Huy Bui,Patient
+102,Alex,Nguyen,New York,NY,10003,en,3,2001,Alex Nguyen,Patient
+103,Sarah,Johnson,Houston,TX,77002,en,1,1001,Dr. Sarah Johnson,Provider
+104,Maria,Rodriguez,Houston,TX,77002,en,1,1001,Maria Rodriguez,Admin
