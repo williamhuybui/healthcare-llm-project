@@ -28,16 +28,20 @@ The goal of this project is to build a healthcare-focused chatbot that provides 
 The chatbot can answer a wide range of questions, from straightforward to complex, by pulling from one or more datasets.
 
 ### Single-source queries
-- 1) *“What is the deductible for my plan?”* → (plans) (plan.csv) 
-- 2) *“Which doctors specialize in pediatrics?”* → (doctor)  (doctor.csv)
+- 1) *“What is the deductible for my plan?”* → (plans) => go to user table to get planid => go to plan table to get plan's deuductible with planid
+
+- 2) *“Which doctors specialize in pediatrics?”* → (doctor)  (doctor.csv) => looks for all speciality in pediatrics in speciality table => then looks for their name and doctor_id
 
 ### Multi-source queries
-- 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  (user.csv, plan.csv)
-- 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  (user.csv, facility.csv, plans_pdf)
-- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv)
+- 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  (user.csv, plan.csv) => go to user table to get planid => go to plan table to get plan's oop_max_individual with planid
+
+- 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  (user.csv, facility.csv, plans_pdf) => go to user table to get planid => go to facility table to get all facility_name that have plan_id included in accepts_plan_ids 
+
+- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv) => go to user table to get city => go to faicility to get all facility_id has same city => go to doctor look for all doctor have same city in our same city facility list => look for doctor has "vi" in languages 
 
 ### Complex scenario queries
-- 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  (user.csv, plan.csv)
+- 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  (user.csv, plan.csv) => go to user_information to get plan_id => go to coverage look for coverage_id has same plan_id => look for service_category => look for coverage_limit => the money need to pay
+
 - 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  (plans_pdf, facility.csv)
 - 8) *“What preventive care services are fully covered under my plan?”* → (plans)   (plans_pdf, plan.csv)
 - 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  (plans_pdf, doctor.csv)
