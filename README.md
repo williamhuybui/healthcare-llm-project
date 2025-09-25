@@ -28,8 +28,16 @@ The goal of this project is to build a healthcare-focused chatbot that provides 
 The chatbot can answer a wide range of questions, from straightforward to complex, by pulling from one or more datasets.
 
 ### Single-source queries
+Assumption: 
+101,Huy,Bui,Houston,TX,77002,vn,plan_id = 1,primary_doctor_id = 1001, role = Patient
+
 - 1) *“What is the deductible for my plan?”* → (plans) (plan.csv) 
+Logic: Since Huy Bui plan id => deductible_individual = 1500 (plan)
+Answer: The indivisual deductible for Huy Bui is 1500
+
 - 2) *“Which doctors specialize in pediatrics?”* → (doctor)  (doctor.csv)
+Logic: Since Huy Bui locate in Houston =>  grab facility 501,502 (facility) -> No doctor in pediatrics (doctor)
+Answer: I could not find any doctor who specialized in pediatrics in your area
 
 ### Multi-source queries
 - 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  (user.csv, plan.csv)
