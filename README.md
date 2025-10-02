@@ -55,12 +55,16 @@ Logic: Since Huy Bui locate in Houston =>  grab facility 501,502 (facility) => F
 Answer: The doctor near Huy Bui in Houston who speaks Vietnamese is Dr Thao Le, doctor_id 1001
 
 
-
 ### Complex scenario queries
 - 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  (user.csv, plan.csv) => go to user_information to get plan_id => go to coverage look for coverage_id has same plan_id => look for service_category => look for coverage_limit => the money need to pay
 
 - 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  (plans_pdf, facility.csv)
 
+Logic: Huy Bui has Blue Advantage Gold HMO Standard plan => scan this plan in pdf file in the plans_pdf folder 
+=> "A written order from your primary care provider for you to see a specialist or get certain health care services. In many health maintenance organizations (HMOs), you need to get a referral before you can get health care services from anyone except your primary care provider. If you don’t get a referral first, the plan may not pay for the services." 
+=> Then look up facility in Houston accepts plan 1: Houston Methodist Hospital, facility_id 501 and Memorial Hermann - Texas Medical Center, facility_id 502
+
+Answer: Yes, you need a referral to see a specialist with your HMO plan. Houston Methodist Hospital and Memorial Hermann - Texas Medical Center are in House which accept your HMO plan.
 
 
 - 8) *“What preventive care services are fully covered under my plan?”* → (plans)   (plans_pdf, plan.csv)
