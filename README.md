@@ -42,16 +42,31 @@ Answer: I could not find any doctor who specialized in pediatrics in your area
 ### Multi-source queries
 - 3) *“How much does it cost for me to see a doctor?”* → (user, plans)  (user.csv, plan.csv) => go to user table to get planid => go to plan table to get plan's oop_max_individual with planid
 
+Logic: Scenario, Huy Bui is asking, from Huy's user_id, get plan plan_id. Then use the plan_id to look up for oop_max_individual from the plan.csv as maximum out-of-pocket cost to see a doctor.
+
+Answer: The maximum out-of-pocket to see a doctor for Huy Bui is $7,800
+
 - 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  (user.csv, facility.csv, plans_pdf) => go to user table to get planid => go to facility table to get all facility_name that have plan_id included in accepts_plan_ids 
 
 - 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv) => go to user table to get city => go to faicility to get all facility_id has same city => go to doctor look for all doctor have same city in our same city facility list => look for doctor has "vi" in languages 
+
+
 
 ### Complex scenario queries
 - 6) *“If I had a heart attack and my hospital bill was $100,000, what would my out-of-pocket cost be?”* → (user, plans)  (user.csv, plan.csv) => go to user_information to get plan_id => go to coverage look for coverage_id has same plan_id => look for service_category => look for coverage_limit => the money need to pay
 
 - 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  (plans_pdf, facility.csv)
+
+
+
 - 8) *“What preventive care services are fully covered under my plan?”* → (plans)   (plans_pdf, plan.csv)
+
+
+
 - 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  (plans_pdf, doctor.csv)
+
+
+
 
 # User Story
 ### Step 1. User Sign-In
