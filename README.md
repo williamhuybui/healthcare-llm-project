@@ -48,7 +48,11 @@ Answer: The maximum out-of-pocket to see a doctor for Huy Bui is $7,800
 
 - 4) *“What facilities in Houston accept my insurance?”* → (user, facility, plans)  (user.csv, facility.csv, plans_pdf) => go to user table to get planid => go to facility table to get all facility_name that have plan_id included in accepts_plan_ids 
 
-- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv) => go to user table to get city => go to faicility to get all facility_id has same city => go to doctor look for all doctor have same city in our same city facility list => look for doctor has "vi" in languages 
+- 5) *“Can you find a doctor near me who speaks Vietnamese?”* → (user, facility, doctor)  (user.csv, facility.csv, doctor.csv) => go to user table to get city => go to faicility to get all facility_id has same city => go to doctor look for all doctor have same city in our same city facility list => look for doctor has "vi" in languages
+
+Logic: Since Huy Bui locate in Houston =>  grab facility 501,502 (facility) => Find doctor in 501, 502 from doctor.csv => look up "vi" in the languages column => return result: Dr Thao Le - doctor_id 1001
+
+Answer: The doctor near Huy Bui in Houston who speaks Vietnamese is Dr Thao Le, doctor_id 1001
 
 
 
