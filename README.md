@@ -61,7 +61,8 @@ Answer: The doctor near Huy Bui in Houston who speaks Vietnamese is Dr Thao Le, 
 - 7) *“Do I need a referral to see a specialist, and which facilities nearby allow that?”* → (plans, facility)  (plans_pdf, facility.csv)
 
 Logic: Huy Bui has Blue Advantage Gold HMO Standard plan => scan this plan in pdf file in the plans_pdf folder 
-=> "A written order from your primary care provider for you to see a specialist or get certain health care services. In many health maintenance organizations (HMOs), you need to get a referral before you can get health care services from anyone except your primary care provider. If you don’t get a referral first, the plan may not pay for the services." 
+=> "This plan will pay some or all of the costs to see a specialist for covered services but only
+if you have a referral before you see the specialist." 
 => Then look up facility in Houston accepts plan 1: Houston Methodist Hospital, facility_id 501 and Memorial Hermann - Texas Medical Center, facility_id 502
 
 Answer: Yes, you need a referral to see a specialist with your HMO plan. Houston Methodist Hospital and Memorial Hermann - Texas Medical Center are in House which accept your HMO plan.
@@ -73,7 +74,10 @@ Answer: Yes, you need a referral to see a specialist with your HMO plan. Houston
 
 - 9) *“Are there any annual limits for physical therapy visits?”* → (plans, doctor)  (plans_pdf, doctor.csv)
 
+Logic: Logic: Huy Bui has Blue Advantage Gold HMO Standard plan => scan this plan in pdf file in the plans_pdf folder 
+=> "Separate 35-visit maximum per benefit period for Habilitation services and Rehabilitation services, including chiropractic care. Referral required. Preauthorization may also be required;"
 
+Answer: There are 35-visit maximum per benefit period for Habilitation services and Rehabilitation services for your plan.
 
 
 # User Story
